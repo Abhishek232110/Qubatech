@@ -1,19 +1,29 @@
-import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import persistReducer from "redux-persist/es/persistReducer";
-import persistStore from "redux-persist/es/persistStore";
+import { configureStore } from "@reduxjs/toolkit";
+import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
-import allData from "../todo/slice";
+import rootReducer from "./reducer"; // Import your root reducer correctly
 
+// Configuration object for redux-persist
 const persistConfig = {
   key: "root",
   storage,
 };
-const reducer = combineReducers({
-  data: allData,
-});
-const persistReducers = persistReducer(persistConfig, reducer);
-export const store = configureStore({
-  reducer: persistReducers,
+
+// Combine reducers with persistReducer
+const persistedReducer = persistReducer(persistConfig, rootReducer);
+
+// Configure the Redux store with the persisted reducer
+const store = configureStore({
+  reducer: persistedReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: ["persist/PERSIST", "persist/REHYDRATE"],
+      },
+    }),
 });
 
-export const persistor = persistStore(store);
+// Create a persistor instance
+const persist = persistStore(store);
+
+export { store, persist };

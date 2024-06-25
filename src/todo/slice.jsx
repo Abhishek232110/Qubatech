@@ -1,13 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  users: [],
   addTask: [],
   updateTask: [],
   deleteTask: [],
   completeTask: [],
   loading: "idle",
-  error: null,
 };
 
 const AllData = createSlice({
@@ -15,7 +13,7 @@ const AllData = createSlice({
   initialState,
   reducers: {
     AddToCart: (state, action) => {
-      state.addTask.push(action.payload);
+      state.addTask = action.payload;
     },
     UpdatoCart: (state, action) => {
       state.updateTask.push(action.payload);

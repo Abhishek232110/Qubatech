@@ -11,7 +11,13 @@ export default function TodoList() {
   const [edit, setEdit] = useState(null);
   const [completeItem, setCompleteItem] = useState([]);
   const dispatch = useDispatch();
-  dispatch(AddToCart(array));
+
+  useEffect(() => {
+    if (array.length > 0) {
+      dispatch(AddToCart(array));
+    }
+  }, [array, dispatch]);
+
   const addTask = () => {
     if (search.trim() !== "") {
       if (edit !== null) {
